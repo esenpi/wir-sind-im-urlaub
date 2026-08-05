@@ -1,0 +1,17 @@
+# Betriebssystem
+.DS_Store
+Thumbs.db
+
+# Editoren
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Build-Artefakte & Archive
+*.zip
+*.log
+
+# Lokale Notizen
+*.local.md
+*.local.php

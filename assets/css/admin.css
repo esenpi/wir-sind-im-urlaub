@@ -1,0 +1,656 @@
+/**
+ * Wir sind im Urlaub – Admin-Styles.
+ */
+
+.wsiu-admin {
+	max-width: 1240px;
+	--wsiu-admin-a: #0284c7;
+	--wsiu-admin-b: #4f46e5;
+	--wsiu-ink: #0f172a;
+	--wsiu-muted: #64748b;
+	--wsiu-line: #e2e8f0;
+}
+
+.wsiu-admin,
+.wsiu-admin p,
+.wsiu-admin label {
+	color: var(--wsiu-ink);
+}
+
+/* --------------------------------------------------------------------------
+ * Hero
+ * ----------------------------------------------------------------------- */
+
+.wsiu-hero {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 1rem;
+	margin: 1.25rem 0 1.5rem;
+	padding: 1.75rem 2rem;
+	border-radius: 20px;
+	background: linear-gradient(135deg, var(--wsiu-admin-a), var(--wsiu-admin-b));
+	box-shadow: 0 16px 44px rgba(37, 51, 131, 0.25);
+	color: #fff;
+}
+
+.wsiu-hero-title {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+}
+
+.wsiu-hero-emoji {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 3.4rem;
+	height: 3.4rem;
+	border-radius: 16px;
+	background: rgba(255, 255, 255, 0.16);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+	font-size: 1.8rem;
+}
+
+.wsiu-hero h1 {
+	margin: 0;
+	padding: 0;
+	color: #fff;
+	font-size: 1.5rem;
+	font-weight: 700;
+	line-height: 1.2;
+}
+
+.wsiu-status {
+	margin: 0.3rem 0 0;
+	font-size: 0.85rem;
+	color: rgba(255, 255, 255, 0.85);
+}
+
+.wsiu-status::before {
+	content: "●";
+	margin-right: 0.4em;
+}
+
+.wsiu-status--live::before      { color: #4ade80; }
+.wsiu-status--announce::before  { color: #fbbf24; }
+.wsiu-status--scheduled::before { color: #93c5fd; }
+.wsiu-status--off::before,
+.wsiu-status--expired::before,
+.wsiu-status--missing::before   { color: rgba(255, 255, 255, 0.55); }
+
+/* --------------------------------------------------------------------------
+ * Schalter (Switch)
+ * ----------------------------------------------------------------------- */
+
+.wsiu-master-toggle {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	font-weight: 600;
+	color: #fff;
+	cursor: pointer;
+	user-select: none;
+}
+
+.wsiu-master-toggle input[type="checkbox"],
+.wsiu-toggle input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+}
+
+.wsiu-switch {
+	position: relative;
+	display: inline-block;
+	width: 52px;
+	height: 30px;
+	flex: 0 0 auto;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.28);
+	transition: background 0.2s ease;
+}
+
+.wsiu-switch::after {
+	content: "";
+	position: absolute;
+	top: 3px;
+	left: 3px;
+	width: 24px;
+	height: 24px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow: 0 2px 6px rgba(2, 6, 23, 0.25);
+	transition: transform 0.2s ease;
+}
+
+.wsiu-master-toggle input:checked + .wsiu-switch {
+	background: #4ade80;
+}
+
+.wsiu-master-toggle input:checked + .wsiu-switch::after,
+.wsiu-toggle input:checked + .wsiu-switch::after {
+	transform: translateX(22px);
+}
+
+.wsiu-master-toggle input:focus-visible + .wsiu-switch,
+.wsiu-toggle input:focus-visible + .wsiu-switch {
+	outline: 2px solid #fff;
+	outline-offset: 2px;
+}
+
+.wsiu-switch--small {
+	width: 42px;
+	height: 24px;
+	background: #cbd5e1;
+}
+
+.wsiu-switch--small::after {
+	width: 18px;
+	height: 18px;
+}
+
+.wsiu-toggle input:checked + .wsiu-switch--small {
+	background: linear-gradient(135deg, var(--wsiu-admin-a), var(--wsiu-admin-b));
+}
+
+.wsiu-toggle input:checked + .wsiu-switch--small::after {
+	transform: translateX(18px);
+}
+
+.wsiu-toggle input:focus-visible + .wsiu-switch--small {
+	outline-color: var(--wsiu-admin-b);
+}
+
+/* --------------------------------------------------------------------------
+ * Layout & Panels
+ * ----------------------------------------------------------------------- */
+
+.wsiu-layout {
+	display: grid;
+	grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+	gap: 1.5rem;
+	align-items: start;
+}
+
+@media screen and (max-width: 1100px) {
+	.wsiu-layout { grid-template-columns: 1fr; }
+	.wsiu-col-preview { order: -1; }
+}
+
+.wsiu-panel {
+	background: #fff;
+	border: 1px solid var(--wsiu-line);
+	border-radius: 16px;
+	padding: 1.5rem 1.6rem;
+	margin-bottom: 1.25rem;
+	box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+.wsiu-panel h2 {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0 0 1.1rem;
+	padding: 0;
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: var(--wsiu-ink);
+}
+
+.wsiu-grid-2 {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+}
+
+.wsiu-grid-3 {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	gap: 1rem;
+}
+
+.wsiu-field {
+	margin-bottom: 1rem;
+}
+
+.wsiu-field > label,
+.wsiu-label {
+	display: block;
+	margin-bottom: 0.4rem;
+	font-weight: 600;
+	font-size: 0.85rem;
+	color: var(--wsiu-ink);
+}
+
+.wsiu-field--inline {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	flex-wrap: wrap;
+}
+
+.wsiu-field--inline > label {
+	margin-bottom: 0;
+}
+
+.wsiu-field--inline input[type="number"] {
+	width: 5rem;
+}
+
+.wsiu-hint {
+	font-size: 0.82rem;
+	color: var(--wsiu-muted);
+}
+
+.wsiu-note {
+	margin: 0.75rem 0 0;
+	padding: 0.7rem 0.9rem;
+	border-radius: 10px;
+	background: #f0f9ff;
+	border: 1px solid #bae6fd;
+	color: #0c4a6e;
+	font-size: 0.82rem;
+}
+
+.wsiu-admin input[type="text"],
+.wsiu-admin input[type="date"],
+.wsiu-admin input[type="time"],
+.wsiu-admin input[type="number"],
+.wsiu-admin select,
+.wsiu-admin textarea {
+	width: 100%;
+	border: 1px solid var(--wsiu-line);
+	border-radius: 10px;
+	padding: 0.5rem 0.7rem;
+	box-shadow: none;
+	font-size: 0.9rem;
+}
+
+.wsiu-admin input:focus,
+.wsiu-admin select:focus,
+.wsiu-admin textarea:focus {
+	border-color: var(--wsiu-admin-b);
+	box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.18);
+	outline: none;
+}
+
+.wsiu-datetime {
+	display: grid;
+	grid-template-columns: 1.6fr 1fr;
+	gap: 0.5rem;
+}
+
+.wsiu-admin input[type="color"] {
+	width: 100%;
+	height: 42px;
+	padding: 0.2rem;
+	border: 1px solid var(--wsiu-line);
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+ * Ferien-Vorschläge
+ * ----------------------------------------------------------------------- */
+
+.wsiu-ferien-controls {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.wsiu-ferien-controls select { flex: 1 1 auto; }
+
+.wsiu-ferien-list {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+	gap: 0.6rem;
+	min-height: 2rem;
+}
+
+.wsiu-ferien-status {
+	grid-column: 1 / -1;
+	font-size: 0.85rem;
+	color: var(--wsiu-muted);
+}
+
+.wsiu-ferien-status--error { color: #b91c1c; }
+.wsiu-ferien-status--ok    { color: #15803d; font-weight: 600; }
+
+.wsiu-ferien-chip {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	padding: 0.65rem 0.85rem;
+	border: 1px solid var(--wsiu-line);
+	border-radius: 12px;
+	background: #f8fafc;
+	cursor: pointer;
+	text-align: left;
+	transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+	font: inherit;
+}
+
+.wsiu-ferien-chip:hover {
+	border-color: var(--wsiu-admin-b);
+	background: #eef2ff;
+	transform: translateY(-1px);
+}
+
+.wsiu-ferien-chip.is-selected {
+	border-color: var(--wsiu-admin-b);
+	background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(79, 70, 229, 0.1));
+	box-shadow: 0 0 0 1px var(--wsiu-admin-b);
+}
+
+.wsiu-ferien-chip strong {
+	font-size: 0.88rem;
+	color: var(--wsiu-ink);
+}
+
+.wsiu-ferien-chip span {
+	font-size: 0.78rem;
+	color: var(--wsiu-muted);
+}
+
+/* --------------------------------------------------------------------------
+ * Anzeigeform-Segmente
+ * ----------------------------------------------------------------------- */
+
+.wsiu-segments {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.6rem;
+}
+
+.wsiu-segment input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+}
+
+.wsiu-segment-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.15rem;
+	padding: 0.85rem 0.5rem;
+	border: 1px solid var(--wsiu-line);
+	border-radius: 12px;
+	background: #f8fafc;
+	text-align: center;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wsiu-segment-box small {
+	color: var(--wsiu-muted);
+	font-size: 0.72rem;
+	line-height: 1.3;
+}
+
+.wsiu-segment-icon {
+	font-size: 1.2rem;
+	line-height: 1;
+	color: var(--wsiu-admin-b);
+}
+
+.wsiu-segment input:checked + .wsiu-segment-box {
+	border-color: var(--wsiu-admin-b);
+	background: linear-gradient(135deg, rgba(2, 132, 199, 0.08), rgba(79, 70, 229, 0.1));
+	box-shadow: 0 0 0 1px var(--wsiu-admin-b);
+}
+
+.wsiu-segment input:focus-visible + .wsiu-segment-box {
+	outline: 2px solid var(--wsiu-admin-b);
+	outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+ * Farbwelten & Symbole
+ * ----------------------------------------------------------------------- */
+
+.wsiu-themes,
+.wsiu-icons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+}
+
+.wsiu-theme-pick,
+.wsiu-icon-pick {
+	position: relative;
+	cursor: pointer;
+	text-align: center;
+}
+
+.wsiu-theme-pick input,
+.wsiu-icon-pick input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+}
+
+.wsiu-swatch {
+	display: block;
+	width: 52px;
+	height: 52px;
+	border-radius: 14px;
+	border: 2px solid transparent;
+	box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wsiu-swatch--ozean   { background: linear-gradient(135deg, #0284c7, #4f46e5); }
+.wsiu-swatch--sonne   { background: linear-gradient(135deg, #f59e0b, #e11d48); }
+.wsiu-swatch--wald    { background: linear-gradient(135deg, #10b981, #047857); }
+.wsiu-swatch--nacht   { background: linear-gradient(135deg, #1f2937, #312e81); }
+.wsiu-swatch--elegant { background: #fff; border-color: var(--wsiu-line); }
+.wsiu-swatch--custom  {
+	background: conic-gradient(#f87171, #facc15, #4ade80, #38bdf8, #a78bfa, #f87171);
+}
+
+.wsiu-theme-pick:hover .wsiu-swatch { transform: translateY(-2px); }
+
+.wsiu-theme-pick input:checked ~ .wsiu-swatch {
+	box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--wsiu-admin-b);
+}
+
+.wsiu-theme-pick input:focus-visible ~ .wsiu-swatch {
+	outline: 2px solid var(--wsiu-admin-b);
+	outline-offset: 4px;
+}
+
+.wsiu-theme-name {
+	display: block;
+	margin-top: 0.35rem;
+	font-size: 0.72rem;
+	line-height: 1.3;
+	color: var(--wsiu-muted);
+	max-width: 64px;
+	text-align: center;
+	overflow-wrap: break-word;
+	hyphens: auto;
+}
+
+.wsiu-icon-box {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 46px;
+	height: 46px;
+	padding: 0 0.6rem;
+	border: 1px solid var(--wsiu-line);
+	border-radius: 12px;
+	background: #f8fafc;
+	font-size: 1.25rem;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wsiu-icon-pick input:checked + .wsiu-icon-box {
+	border-color: var(--wsiu-admin-b);
+	box-shadow: 0 0 0 1px var(--wsiu-admin-b);
+	background: #eef2ff;
+}
+
+.wsiu-icon-pick input:focus-visible + .wsiu-icon-box {
+	outline: 2px solid var(--wsiu-admin-b);
+	outline-offset: 2px;
+}
+
+.wsiu-toggles {
+	display: flex;
+	flex-direction: column;
+	gap: 0.7rem;
+	margin-top: 1.1rem;
+}
+
+.wsiu-toggle {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	cursor: pointer;
+	font-size: 0.88rem;
+	user-select: none;
+}
+
+/* --------------------------------------------------------------------------
+ * Speichern-Leiste & Fußnote
+ * ----------------------------------------------------------------------- */
+
+.wsiu-savebar {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex-wrap: wrap;
+	margin: 1.5rem 0 0.5rem;
+}
+
+.wsiu-save {
+	border: 0;
+	border-radius: 12px;
+	padding: 0.75rem 1.8rem;
+	background: linear-gradient(135deg, var(--wsiu-admin-a), var(--wsiu-admin-b));
+	color: #fff;
+	font-size: 0.95rem;
+	font-weight: 700;
+	cursor: pointer;
+	box-shadow: 0 8px 24px rgba(37, 51, 131, 0.3);
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wsiu-save:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 12px 30px rgba(37, 51, 131, 0.38);
+}
+
+.wsiu-preview-link {
+	font-size: 0.88rem;
+	text-decoration: none;
+	color: var(--wsiu-admin-b);
+	font-weight: 600;
+}
+
+.wsiu-footnote {
+	margin-top: 0.75rem;
+	font-size: 0.8rem;
+	color: var(--wsiu-muted);
+}
+
+/* --------------------------------------------------------------------------
+ * Live-Vorschau
+ * ----------------------------------------------------------------------- */
+
+.wsiu-col-preview {
+	position: sticky;
+	top: 48px;
+}
+
+.wsiu-preview-card {
+	background: #fff;
+	border: 1px solid var(--wsiu-line);
+	border-radius: 16px;
+	padding: 1.5rem 1.6rem;
+	box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+.wsiu-preview-card h2 {
+	margin: 0 0 1rem;
+	padding: 0;
+	font-size: 1.05rem;
+}
+
+.wsiu-browser {
+	border: 1px solid var(--wsiu-line);
+	border-radius: 14px;
+	overflow: hidden;
+	background: #f1f5f9;
+}
+
+.wsiu-browser-bar {
+	display: flex;
+	gap: 6px;
+	padding: 10px 12px;
+	background: #e2e8f0;
+}
+
+.wsiu-browser-bar span {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background: #cbd5e1;
+}
+
+.wsiu-browser-bar span:nth-child(1) { background: #f87171; }
+.wsiu-browser-bar span:nth-child(2) { background: #facc15; }
+.wsiu-browser-bar span:nth-child(3) { background: #4ade80; }
+
+.wsiu-preview-stage {
+	position: relative;
+	min-height: 340px;
+	padding: 1rem;
+	display: flex;
+	flex-direction: column;
+	background:
+		linear-gradient(180deg, rgba(148, 163, 184, 0.12) 0 44px, transparent 44px),
+		repeating-linear-gradient(0deg, transparent 0 70px, rgba(148, 163, 184, 0.14) 70px 71px),
+		#f8fafc;
+}
+
+/* In der Vorschau darf nichts fixed positioniert sein. */
+.wsiu-preview-stage .wsiu-root {
+	position: relative !important;
+	inset: auto !important;
+	visibility: visible !important;
+	opacity: 1 !important;
+	animation: none !important;
+}
+
+.wsiu-preview-stage .wsiu-banner  { margin: 0 -1rem; }
+.wsiu-preview-stage .wsiu-banner--bottom { margin-top: auto; }
+
+.wsiu-preview-stage .wsiu-overlay {
+	flex: 1 1 auto;
+	margin: -1rem;
+	padding: 1.5rem;
+	border-radius: 0;
+}
+
+.wsiu-preview-stage .wsiu-popup {
+	width: min(24rem, 100%);
+	padding: 2rem 1.5rem 1.5rem;
+	max-height: none;
+}
+
+.wsiu-preview-stage .wsiu-card {
+	width: min(21rem, 100%);
+	margin-top: auto;
+}
+
+.wsiu-preview-stage .wsiu-card--bottom-right { align-self: flex-end; }
+.wsiu-preview-stage .wsiu-card--bottom-left  { align-self: flex-start; }

@@ -1,0 +1,491 @@
+/**
+ * Wir sind im Urlaub – Frontend-Styles.
+ *
+ * Farbwelten werden über CSS-Custom-Properties gesteuert:
+ *   --wsiu-a / --wsiu-b   Verlaufsfarben
+ *   --wsiu-text           Textfarbe
+ * Das Theme "custom" setzt die Variablen inline am Root-Element.
+ */
+
+.wsiu-root {
+	--wsiu-a: #0284c7;
+	--wsiu-b: #4f46e5;
+	--wsiu-text: #ffffff;
+	--wsiu-grad: linear-gradient(135deg, var(--wsiu-a), var(--wsiu-b));
+	--wsiu-chip-bg: rgba(255, 255, 255, 0.18);
+	--wsiu-chip-text: var(--wsiu-text);
+	--wsiu-shadow: 0 16px 48px rgba(2, 6, 23, 0.28);
+
+	box-sizing: border-box;
+	font-family: inherit;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+}
+
+.wsiu-root *,
+.wsiu-root *::before,
+.wsiu-root *::after {
+	box-sizing: inherit;
+}
+
+/* Bis frontend.js entschieden hat (verworfen? abgelaufen?), unsichtbar halten. */
+.wsiu-root:not(.wsiu-show) {
+	visibility: hidden;
+	opacity: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Farbwelten
+ * ----------------------------------------------------------------------- */
+
+.wsiu-theme-ozean   { --wsiu-a: #0284c7; --wsiu-b: #4f46e5; }
+.wsiu-theme-sonne   { --wsiu-a: #f59e0b; --wsiu-b: #e11d48; }
+.wsiu-theme-wald    { --wsiu-a: #10b981; --wsiu-b: #047857; }
+.wsiu-theme-nacht   { --wsiu-a: #1f2937; --wsiu-b: #312e81; }
+
+.wsiu-theme-elegant {
+	--wsiu-grad: #ffffff;
+	--wsiu-text: #0f172a;
+	--wsiu-chip-bg: #f1f5f9;
+	--wsiu-chip-text: #334155;
+	--wsiu-shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* --------------------------------------------------------------------------
+ * Gemeinsame Bausteine
+ * ----------------------------------------------------------------------- */
+
+.wsiu-headline {
+	color: var(--wsiu-text);
+	font-weight: 700;
+	letter-spacing: 0.01em;
+	margin: 0;
+}
+
+.wsiu-message {
+	color: var(--wsiu-text);
+	opacity: 0.92;
+	margin: 0;
+}
+
+.wsiu-message a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.wsiu-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.4em;
+	height: 2.4em;
+	flex: 0 0 auto;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.16);
+	font-size: 1.15em;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.wsiu-theme-elegant .wsiu-icon {
+	background: #f1f5f9;
+	box-shadow: inset 0 0 0 1px #e2e8f0;
+}
+
+.wsiu-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	padding: 0.35em 0.85em;
+	border-radius: 999px;
+	background: var(--wsiu-chip-bg);
+	color: var(--wsiu-chip-text);
+	font-size: 0.82em;
+	font-weight: 600;
+	white-space: nowrap;
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.wsiu-theme-elegant .wsiu-chip {
+	box-shadow: inset 0 0 0 1px #e2e8f0;
+}
+
+/* Harter Reset: Button-Styles des Themes (min-width, padding, Farben …)
+   dürfen den Schließen-Button nicht verformen – sonst wird aus dem
+   runden ✕ eine breitgezogene Ellipse. */
+.wsiu-root button.wsiu-dismiss {
+	all: unset;
+	box-sizing: border-box !important;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	width: 30px !important;
+	height: 30px !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	max-width: none !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	border: 0 !important;
+	border-radius: 50% !important;
+	background: rgba(255, 255, 255, 0.16) !important;
+	color: var(--wsiu-text) !important;
+	font-family: inherit !important;
+	font-size: 13px !important;
+	font-weight: 400 !important;
+	line-height: 1 !important;
+	text-align: center !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+	text-shadow: none !important;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18) !important;
+	cursor: pointer !important;
+	flex: 0 0 auto;
+	transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.wsiu-root button.wsiu-dismiss:hover {
+	background: rgba(255, 255, 255, 0.3) !important;
+	transform: scale(1.08);
+}
+
+.wsiu-root.wsiu-theme-elegant button.wsiu-dismiss {
+	background: #f1f5f9 !important;
+	color: #334155 !important;
+	box-shadow: inset 0 0 0 1px #e2e8f0 !important;
+}
+
+.wsiu-root.wsiu-theme-elegant button.wsiu-dismiss:hover {
+	background: #e2e8f0 !important;
+}
+
+.wsiu-root :focus-visible {
+	outline: 2px solid var(--wsiu-text);
+	outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+ * Balken
+ * ----------------------------------------------------------------------- */
+
+.wsiu-banner {
+	position: fixed;
+	left: 0;
+	right: 0;
+	z-index: 99990;
+	background: var(--wsiu-grad);
+	box-shadow: var(--wsiu-shadow);
+	padding: 0.85rem 1.25rem;
+}
+
+.wsiu-banner--top {
+	top: 0;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.wsiu-banner--bottom {
+	bottom: 0;
+	border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.wsiu-theme-elegant.wsiu-banner--top    { border-bottom: 1px solid #e2e8f0; }
+.wsiu-theme-elegant.wsiu-banner--bottom { border-top: 1px solid #e2e8f0; }
+
+/* Feiner Glanz an der Oberkante. */
+.wsiu-banner::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto 0;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+	pointer-events: none;
+}
+
+.wsiu-theme-elegant.wsiu-banner::before { display: none; }
+
+.wsiu-banner-inner {
+	display: flex;
+	align-items: center;
+	gap: 0.9rem;
+	max-width: 72rem;
+	margin: 0 auto;
+}
+
+.wsiu-banner-text {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	column-gap: 0.6rem;
+	row-gap: 0.15rem;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.wsiu-banner .wsiu-headline { font-size: 1rem; }
+.wsiu-banner .wsiu-message  { font-size: 0.92rem; }
+
+.wsiu-banner--top.wsiu-show    { animation: wsiu-slide-down 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+.wsiu-banner--bottom.wsiu-show { animation: wsiu-slide-up 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Versatz für die WordPress-Adminleiste. */
+body.admin-bar .wsiu-banner--top { top: 32px; }
+
+@media screen and (max-width: 782px) {
+	body.admin-bar .wsiu-banner--top { top: 46px; }
+}
+
+/* --------------------------------------------------------------------------
+ * Popup
+ * ----------------------------------------------------------------------- */
+
+.wsiu-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 99991;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1.25rem;
+	background: rgba(15, 23, 42, 0.55);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+}
+
+.wsiu-popup {
+	position: relative;
+	width: min(30rem, 100%);
+	max-height: calc(100vh - 2.5rem);
+	overflow-y: auto;
+	background: var(--wsiu-grad);
+	color: var(--wsiu-text);
+	border-radius: 24px;
+	box-shadow: var(--wsiu-shadow);
+	padding: 2.5rem 2rem 2rem;
+	text-align: center;
+}
+
+.wsiu-theme-elegant .wsiu-popup {
+	border: 1px solid #e2e8f0;
+}
+
+.wsiu-overlay.wsiu-show .wsiu-popup {
+	animation: wsiu-pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wsiu-root .wsiu-popup button.wsiu-dismiss {
+	position: absolute;
+	top: 1rem;
+	right: 1rem;
+}
+
+.wsiu-popup-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 4.5rem;
+	height: 4.5rem;
+	margin-bottom: 1rem;
+	border-radius: 50%;
+	background: rgba(255, 255, 255, 0.16);
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+	font-size: 2.1rem;
+}
+
+.wsiu-theme-elegant .wsiu-popup-icon {
+	background: linear-gradient(135deg, #f8fafc, #eef2f7);
+	box-shadow: inset 0 0 0 1px #e2e8f0;
+}
+
+.wsiu-popup .wsiu-headline {
+	font-size: 1.6rem;
+	line-height: 1.25;
+	margin-bottom: 0.6rem;
+}
+
+.wsiu-popup .wsiu-message {
+	font-size: 1rem;
+	margin-bottom: 1.1rem;
+}
+
+.wsiu-dates {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.6rem;
+	margin-bottom: 1rem;
+	flex-wrap: wrap;
+}
+
+.wsiu-date-pill {
+	padding: 0.4em 0.9em;
+	border-radius: 999px;
+	background: var(--wsiu-chip-bg);
+	color: var(--wsiu-chip-text);
+	font-size: 0.88em;
+	font-weight: 600;
+	box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.wsiu-theme-elegant .wsiu-date-pill {
+	box-shadow: inset 0 0 0 1px #e2e8f0;
+}
+
+.wsiu-dates-arrow {
+	color: var(--wsiu-text);
+	opacity: 0.7;
+}
+
+.wsiu-popup .wsiu-chip {
+	margin-bottom: 1.4rem;
+}
+
+/* Ebenfalls hart zurückgesetzt: sonst erbt der Button z. B. weiße
+   Schriftfarbe aus dem Theme und wird auf hellem Grund unlesbar. */
+.wsiu-root button.wsiu-btn {
+	all: unset;
+	box-sizing: border-box !important;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	display: block !important;
+	width: 100% !important;
+	min-width: 0 !important;
+	min-height: 0 !important;
+	padding: 0.8rem 1.4rem !important;
+	margin: 0 !important;
+	border: 0 !important;
+	border-radius: 14px !important;
+	background: #ffffff !important;
+	color: #0f172a !important;
+	font-family: inherit !important;
+	font-size: 1rem !important;
+	font-weight: 700 !important;
+	line-height: 1.4 !important;
+	text-align: center !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+	text-decoration: none !important;
+	text-shadow: none !important;
+	cursor: pointer !important;
+	box-shadow: 0 6px 20px rgba(2, 6, 23, 0.2) !important;
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wsiu-root button.wsiu-btn:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 10px 26px rgba(2, 6, 23, 0.26) !important;
+}
+
+.wsiu-root.wsiu-theme-elegant button.wsiu-btn {
+	background: linear-gradient(135deg, #0f172a, #334155) !important;
+	color: #ffffff !important;
+}
+
+/* Scroll-Sperre, solange das Popup offen ist. */
+body.wsiu-lock {
+	overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+ * Schwebende Karte & Inline-Box
+ * ----------------------------------------------------------------------- */
+
+.wsiu-card,
+.wsiu-inlinebox {
+	background: var(--wsiu-grad);
+	color: var(--wsiu-text);
+	border-radius: 20px;
+	box-shadow: var(--wsiu-shadow);
+	padding: 1.4rem 1.5rem;
+}
+
+.wsiu-theme-elegant.wsiu-card,
+.wsiu-theme-elegant.wsiu-inlinebox {
+	border: 1px solid #e2e8f0;
+}
+
+.wsiu-card {
+	position: fixed;
+	bottom: 1.25rem;
+	z-index: 99990;
+	width: min(23rem, calc(100vw - 2.5rem));
+}
+
+.wsiu-card--bottom-right { right: 1.25rem; }
+.wsiu-card--bottom-left  { left: 1.25rem; }
+
+.wsiu-card.wsiu-show { animation: wsiu-pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+
+.wsiu-root.wsiu-card button.wsiu-dismiss {
+	position: absolute;
+	top: 0.9rem;
+	right: 0.9rem;
+}
+
+.wsiu-card-head {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	margin-bottom: 0.55rem;
+	padding-right: 2.2rem;
+}
+
+.wsiu-card .wsiu-headline,
+.wsiu-inlinebox .wsiu-headline {
+	font-size: 1.05rem;
+}
+
+.wsiu-card .wsiu-message,
+.wsiu-inlinebox .wsiu-message {
+	font-size: 0.92rem;
+	margin-bottom: 0.8rem;
+}
+
+.wsiu-inlinebox {
+	margin: 1.5rem 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Animationen
+ * ----------------------------------------------------------------------- */
+
+@keyframes wsiu-slide-down {
+	from { transform: translateY(-100%); opacity: 0; }
+	to   { transform: translateY(0);     opacity: 1; }
+}
+
+@keyframes wsiu-slide-up {
+	from { transform: translateY(100%); opacity: 0; }
+	to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes wsiu-pop-in {
+	from { transform: scale(0.92) translateY(10px); opacity: 0; }
+	to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wsiu-root,
+	.wsiu-root * {
+		animation: none !important;
+		transition: none !important;
+	}
+}
+
+/* --------------------------------------------------------------------------
+ * Responsive & Druck
+ * ----------------------------------------------------------------------- */
+
+@media screen and (max-width: 640px) {
+	.wsiu-banner { padding: 0.7rem 0.9rem; }
+	.wsiu-banner .wsiu-chip { display: none; }
+	.wsiu-banner .wsiu-message { font-size: 0.85rem; }
+	.wsiu-popup { padding: 2rem 1.25rem 1.5rem; }
+	.wsiu-popup .wsiu-headline { font-size: 1.35rem; }
+}
+
+@media print {
+	.wsiu-root { display: none !important; }
+}
