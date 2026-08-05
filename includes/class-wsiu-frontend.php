@@ -28,10 +28,13 @@ final class Frontend {
 	 * damit man das Design live testen kann, bevor der Urlaub beginnt.
 	 */
 	private function preview_phase(): ?string {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Reine Lese-Vorschau ohne Statusänderung, zusätzlich per Capability-Check abgesichert.
 		if ( ! isset( $_GET['wsiu_preview'] ) || ! current_user_can( 'manage_options' ) ) {
 			return null;
 		}
-		return 'before' === $_GET['wsiu_preview'] ? 'before' : 'during';
+		$value = sanitize_key( wp_unslash( $_GET['wsiu_preview'] ) );
+		// phpcs:enable
+		return 'before' === $value ? 'before' : 'during';
 	}
 
 	private function active_phase( array $s ): ?string {
@@ -50,8 +53,30 @@ final class Frontend {
 		if ( ! $this->active_phase( $s ) ) {
 			return;
 		}
+		$this->enqueue_assets( $s );
+	}
+
+	/**
+	 * Styles/Skripte laden; eigene Farben als Inline-CSS-Variablen anhängen.
+	 */
+	private function enqueue_assets( array $s ): void {
 		wp_enqueue_style( 'wsiu-frontend', WSIU_URL . 'assets/css/frontend.css', array(), WSIU_VERSION );
 		wp_enqueue_script( 'wsiu-frontend', WSIU_URL . 'assets/js/frontend.js', array(), WSIU_VERSION, true );
+
+		if ( 'custom' === $s['theme'] ) {
+			$color_a = sanitize_hex_color( $s['color_start'] );
+			$color_b = sanitize_hex_color( $s['color_end'] );
+			$color_t = sanitize_hex_color( $s['color_text'] );
+			wp_add_inline_style(
+				'wsiu-frontend',
+				sprintf(
+					'.wsiu-root{--wsiu-a:%s;--wsiu-b:%s;--wsiu-text:%s;}',
+					$color_a ? $color_a : '#0284c7',
+					$color_b ? $color_b : '#4f46e5',
+					$color_t ? $color_t : '#ffffff'
+				)
+			);
+		}
 	}
 
 	public function render(): void {
@@ -64,7 +89,7 @@ final class Frontend {
 			return;
 		}
 
-		echo $this->markup( $s, $phase, $s['display_mode'], (bool) $this->preview_phase() ); // phpcs:ignore WordPress.Security.EscapeOutput -- Markup wird intern escaped aufgebaut.
+		echo wp_kses( $this->markup( $s, $phase, $s['display_mode'], (bool) $this->preview_phase() ), self::allowed_html() );
 		// Ohne JavaScript: Balken/Karte/Inline-Box trotzdem zeigen. Das Popup
 		// bleibt verborgen, da es sich ohne JS nicht schließen ließe.
 		echo '<noscript><style>.wsiu-banner,.wsiu-card,.wsiu-inlinebox{visibility:visible !important;opacity:1 !important}</style></noscript>';
@@ -80,15 +105,64 @@ final class Frontend {
 			return '';
 		}
 		// Assets sicherstellen, falls der Shortcode die einzige Ausgabe ist.
-		wp_enqueue_style( 'wsiu-frontend', WSIU_URL . 'assets/css/frontend.css', array(), WSIU_VERSION );
-		wp_enqueue_script( 'wsiu-frontend', WSIU_URL . 'assets/js/frontend.js', array(), WSIU_VERSION, true );
+		$this->enqueue_assets( $s );
 
-		return $this->markup( $s, $phase, 'inline', (bool) $this->preview_phase() );
+		return wp_kses( $this->markup( $s, $phase, 'inline', (bool) $this->preview_phase() ), self::allowed_html() );
 	}
 
 	/* ---------------------------------------------------------------------
 	 * Markup
 	 * ------------------------------------------------------------------ */
+
+	/**
+	 * Whitelist für wp_kses(): alle Tags/Attribute, die markup() erzeugt.
+	 */
+	private static function allowed_html(): array {
+		return array(
+			'div'    => array(
+				'class'            => true,
+				'role'             => true,
+				'aria-label'       => true,
+				'aria-modal'       => true,
+				'aria-labelledby'  => true,
+				'aria-hidden'      => true,
+				'data-wsiu-root'   => true,
+				'data-mode'        => true,
+				'data-phase'       => true,
+				'data-hash'        => true,
+				'data-start'       => true,
+				'data-end'         => true,
+				'data-dismissible' => true,
+				'data-frequency'   => true,
+				'data-countdown'   => true,
+				'data-banner-pos'  => true,
+				'data-preview'     => true,
+			),
+			'h2'     => array(
+				'class' => true,
+				'id'    => true,
+			),
+			'p'      => array( 'class' => true ),
+			'span'   => array(
+				'class'               => true,
+				'aria-hidden'         => true,
+				'data-wsiu-countdown' => true,
+			),
+			'strong' => array( 'class' => true ),
+			'em'     => array(),
+			'br'     => array(),
+			'a'      => array(
+				'href'   => true,
+				'target' => true,
+			),
+			'button' => array(
+				'type'              => true,
+				'class'             => true,
+				'aria-label'        => true,
+				'data-wsiu-dismiss' => true,
+			),
+		);
+	}
 
 	private function markup( array $s, string $phase, string $mode, bool $is_preview ): string {
 		$start = Settings::start( $s );
@@ -111,18 +185,7 @@ final class Frontend {
 		$headline = strtr( $headline, $replacements );
 		$message  = strtr( $message, $replacements );
 
-		$theme_class = 'wsiu-theme-' . $s['theme'];
-		$style       = '';
-		if ( 'custom' === $s['theme'] ) {
-			$style = sprintf(
-				'--wsiu-a:%s;--wsiu-b:%s;--wsiu-text:%s;',
-				esc_attr( $s['color_start'] ),
-				esc_attr( $s['color_end'] ),
-				esc_attr( $s['color_text'] )
-			);
-		}
-
-		$classes = array( 'wsiu-root', $theme_class );
+		$classes = array( 'wsiu-root', 'wsiu-theme-' . $s['theme'] );
 		switch ( $mode ) {
 			case 'popup':
 				$classes[] = 'wsiu-overlay';
@@ -144,22 +207,19 @@ final class Frontend {
 		$hash = substr( md5( $s['start_date'] . '|' . $s['end_date'] . '|' . $mode . '|' . WSIU_VERSION ), 0, 12 );
 
 		$attrs = array(
-			'class'             => implode( ' ', $classes ),
-			'data-wsiu-root'    => '1',
-			'data-mode'         => $mode,
-			'data-phase'        => $phase,
-			'data-hash'         => $hash,
-			'data-start'        => $start ? (string) $start->getTimestamp() : '',
-			'data-end'          => $end ? (string) $end->getTimestamp() : '',
-			'data-dismissible'  => $s['dismissible'] ? '1' : '0',
-			'data-frequency'    => $s['popup_frequency'],
-			'data-countdown'    => $s['show_countdown'] ? '1' : '0',
-			'data-banner-pos'   => $s['banner_position'],
-			'data-preview'      => $is_preview ? '1' : '0',
+			'class'            => implode( ' ', $classes ),
+			'data-wsiu-root'   => '1',
+			'data-mode'        => $mode,
+			'data-phase'       => $phase,
+			'data-hash'        => $hash,
+			'data-start'       => $start ? (string) $start->getTimestamp() : '',
+			'data-end'         => $end ? (string) $end->getTimestamp() : '',
+			'data-dismissible' => $s['dismissible'] ? '1' : '0',
+			'data-frequency'   => $s['popup_frequency'],
+			'data-countdown'   => $s['show_countdown'] ? '1' : '0',
+			'data-banner-pos'  => $s['banner_position'],
+			'data-preview'     => $is_preview ? '1' : '0',
 		);
-		if ( $style ) {
-			$attrs['style'] = $style;
-		}
 
 		$attr_html = '';
 		foreach ( $attrs as $key => $value ) {

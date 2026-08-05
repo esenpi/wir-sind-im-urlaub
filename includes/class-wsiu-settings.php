@@ -114,9 +114,9 @@ final class Settings {
 		$out['popup_frequency'] = self::one_of( $in['popup_frequency'] ?? '', array( 'always', 'session', 'day' ), $d['popup_frequency'] );
 		$out['theme']           = self::one_of( $in['theme'] ?? '', array( 'ozean', 'sonne', 'wald', 'nacht', 'elegant', 'custom' ), $d['theme'] );
 
-		$out['color_start'] = sanitize_hex_color( $in['color_start'] ?? '' ) ?: $d['color_start'];
-		$out['color_end']   = sanitize_hex_color( $in['color_end'] ?? '' ) ?: $d['color_end'];
-		$out['color_text']  = sanitize_hex_color( $in['color_text'] ?? '' ) ?: $d['color_text'];
+		$out['color_start'] = self::hex_or( $in['color_start'] ?? '', $d['color_start'] );
+		$out['color_end']   = self::hex_or( $in['color_end'] ?? '', $d['color_end'] );
+		$out['color_text']  = self::hex_or( $in['color_text'] ?? '', $d['color_text'] );
 
 		$out['icon'] = in_array( $in['icon'] ?? '', self::icons(), true ) ? $in['icon'] : $d['icon'];
 
@@ -151,6 +151,11 @@ final class Settings {
 		);
 	}
 
+	private static function hex_or( string $value, string $fallback ): string {
+		$hex = sanitize_hex_color( $value );
+		return $hex ? $hex : $fallback;
+	}
+
 	private static function valid_date( string $value ): string {
 		$dt = \DateTimeImmutable::createFromFormat( 'Y-m-d', $value );
 		return ( $dt && $dt->format( 'Y-m-d' ) === $value ) ? $value : '';
@@ -172,14 +177,14 @@ final class Settings {
 	 * Beginn des Urlaubs als DateTimeImmutable (WP-Zeitzone) oder null.
 	 */
 	public static function start( array $s ): ?\DateTimeImmutable {
-		return self::combine( $s['start_date'], $s['start_time'] ?: '00:00' );
+		return self::combine( $s['start_date'], $s['start_time'] ? $s['start_time'] : '00:00' );
 	}
 
 	/**
 	 * Ende des Urlaubs (inklusive, d. h. letzter angezeigter Moment) oder null.
 	 */
 	public static function end( array $s ): ?\DateTimeImmutable {
-		$end = self::combine( $s['end_date'], $s['end_time'] ?: '23:59' );
+		$end = self::combine( $s['end_date'], $s['end_time'] ? $s['end_time'] : '23:59' );
 		return $end ? $end->setTime( (int) $end->format( 'H' ), (int) $end->format( 'i' ), 59 ) : null;
 	}
 
@@ -188,7 +193,7 @@ final class Settings {
 			return null;
 		}
 		$dt = \DateTimeImmutable::createFromFormat( 'Y-m-d H:i', $date . ' ' . $time, wp_timezone() );
-		return $dt ?: null;
+		return false === $dt ? null : $dt;
 	}
 
 	/**

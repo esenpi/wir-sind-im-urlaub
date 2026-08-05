@@ -66,11 +66,11 @@ final class SchoolHolidays {
 		$today = current_datetime();
 		$url   = add_query_arg(
 			array(
-				'countryIsoCode' => 'DE',
+				'countryIsoCode'  => 'DE',
 				'subdivisionCode' => $land,
 				'languageIsoCode' => 'DE',
-				'validFrom'      => $today->format( 'Y-m-d' ),
-				'validTo'        => $today->modify( '+18 months' )->format( 'Y-m-d' ),
+				'validFrom'       => $today->format( 'Y-m-d' ),
+				'validTo'         => $today->modify( '+18 months' )->format( 'Y-m-d' ),
 			),
 			'https://openholidaysapi.org/SchoolHolidays'
 		);
@@ -203,7 +203,7 @@ final class SchoolHolidays {
 		if ( '' === $name ) {
 			return '';
 		}
-		if ( function_exists( 'mb_convert_case' ) && $name === strtolower( $name ) ) {
+		if ( function_exists( 'mb_convert_case' ) && strtolower( $name ) === $name ) {
 			$name = mb_convert_case( $name, MB_CASE_TITLE, 'UTF-8' );
 		}
 		return $name;

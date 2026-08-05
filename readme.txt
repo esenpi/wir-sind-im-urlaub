@@ -2,7 +2,7 @@
 Contributors: amarenasoftware
 Tags: urlaub, betriebsurlaub, banner, popup, hinweis
 Requires at least: 5.8
-Tested up to: 6.6
+Tested up to: 7.0
 Requires PHP: 7.4
 Stable tag: 0.0.1
 License: GPLv2 or later

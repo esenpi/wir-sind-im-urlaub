@@ -73,12 +73,12 @@ final class Admin {
 				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 				'nonce'   => wp_create_nonce( 'wsiu_admin' ),
 				'i18n'    => array(
-					'loading'    => __( 'Ferien werden geladen …', 'wir-sind-im-urlaub' ),
-					'error'      => __( 'Ferien konnten nicht geladen werden.', 'wir-sind-im-urlaub' ),
-					'applied'    => __( 'Zeitraum übernommen – bitte speichern.', 'wir-sind-im-urlaub' ),
-					'noResults'  => __( 'Keine kommenden Ferien gefunden.', 'wir-sind-im-urlaub' ),
-					'days'       => __( 'Tage', 'wir-sind-im-urlaub' ),
-					'day'        => __( 'Tag', 'wir-sind-im-urlaub' ),
+					'loading'   => __( 'Ferien werden geladen …', 'wir-sind-im-urlaub' ),
+					'error'     => __( 'Ferien konnten nicht geladen werden.', 'wir-sind-im-urlaub' ),
+					'applied'   => __( 'Zeitraum übernommen – bitte speichern.', 'wir-sind-im-urlaub' ),
+					'noResults' => __( 'Keine kommenden Ferien gefunden.', 'wir-sind-im-urlaub' ),
+					'days'      => __( 'Tage', 'wir-sind-im-urlaub' ),
+					'day'       => __( 'Tag', 'wir-sind-im-urlaub' ),
 				),
 			)
 		);
